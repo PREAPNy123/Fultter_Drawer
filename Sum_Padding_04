@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+
+import 'home.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primaryColor: Colors.pink),
+      home: (Home()),
+    );
+  }
+}
+=======================================================================
+
+import 'package:flutter/material.dart';
+
+import 'detailapp.dart';
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Calculator'),
+      ),
+      body: SafeArea(child: DetailApp(),),  // Create Detail app
+    );
+  }
+}
+
+====================================================================
+import 'package:flutter/material.dart';
+
+class DetailApp extends StatefulWidget {
+  @override
+  State<DetailApp> createState() => _DetailAppState();
+}
+
+class _DetailAppState extends State<DetailApp> {
+  var txt1 = TextEditingController();
+  var txt2 = TextEditingController();
+  var resualt;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 40, right: 40),
+      child: Column(
+        children: [
+          Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              child: TextField(
+                controller: txt1,
+                decoration: InputDecoration(
+                  labelText: "Value 1",
+                  hintText: "Enter value",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20)
+                  )
+                ),
+              )),
+          Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              child: TextField(
+                controller: txt2,
+                decoration: InputDecoration(
+                  labelText: 'Value 2',
+                  hintText: 'Enter Value ',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  )
+                ),
+              )),
+          Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: RaisedButton(
+                color: Colors.orange,
+                child: Text("Sum"),
+                onPressed: btnSumClick),
+          ), //Create Methode sum click
+          Text(
+            "Result: " + resualt,
+            style: TextStyle(fontSize: 50),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //  ======Create Methode sum click=====
+  void btnSumClick() {
+    setState(() {
+      // refressData
+      double v1 = double.parse(txt1.text);
+      double v2 = double.parse(txt2.text);
+      double sum = v1 + v2;
+      resualt = '$sum';
+    });
+  }
+}

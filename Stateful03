@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+
+import 'home.dart';
+
+void main()=>runApp(Myapp());
+class Myapp extends StatelessWidget {
+  const Myapp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.pink,
+      ),
+      home: Home(),
+    );
+  }
+}
+
+============================================================================
+
+import 'package:flutter/material.dart';
+import 'package:stafulwidge/mybody.dart';
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Well Com Myapp"),
+      ),
+      body: SafeArea(child: MyBodyApp(),),
+    );
+  }
+}
+
+=======================================================================
+
+import 'package:flutter/material.dart';
+class MyBodyApp extends StatefulWidget {
+  const MyBodyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyBodyApp> createState() => _MyBodyAppState();
+}
+
+class _MyBodyAppState extends State<MyBodyApp> {
+  List<String>list=[];//creat array list
+  TextEditingController textAdd = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView( //add widget than
+      child: Column(
+        children: [
+          TextField(
+            controller: textAdd,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(), // it's class for box of textfile
+              labelText: 'Enter programming ',
+              hintText: 'Please Enter Text ',
+              icon: Image(
+                width: 40,height: 40,
+                image: AssetImage('images/logo.png'), // image in directeri
+              )
+              //icon: Icon(Icons.people),// icon on flutter
+              //icon: Image(width: 40,height: 40,image: NetworkImage('https://w7.pngwing.com/pngs/176/67/png-transparent-person-logo-people-travel-text-rectangle-logo.png'),)
+            ),
+          ),
+          RaisedButton(color: Colors.blue,child:Text('Add'), onPressed: (){
+            //get data form text file
+            setState(() { // for Reload Data // it's used whith statefule
+              list.add(textAdd.text);
+              textAdd.clear();
+            });
+          }),
+          Container( //add widget than
+            height: 450,
+            child: ListView.builder(
+              itemCount: list.length,
+                itemBuilder: (context,index){
+              return ListTile(
+                title: Text(list[index]),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+}

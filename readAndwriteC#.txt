@@ -1,0 +1,58 @@
+ private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (txtName.Text !="" && txtGender.Text != "" && txtPhone.Text != "")
+            {
+                ListViewItem T = listView.Items.Add(txtName.Text);
+                T.SubItems.Add(txtGender.Text);
+                T.SubItems.Add(txtPhone.Text);
+                txtName.Text = "";
+                txtGender.Text = "";
+                txtPhone.Text = "";
+                txtName.Focus();
+            }
+            else
+            {
+                MessageBox.Show("Pleas Enter All Imformation !");
+            }
+           
+        }
+==================================================
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            listView.Items.Remove(listView.SelectedItems[0]);
+        }
+===================================================
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.ShowDialog();
+            FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
+            for(int i = 0; i<listView.Items.Count; i++)
+            {
+                sw.WriteLine(listView.Items[i].Text + "#" +
+                    listView.Items[i].SubItems[1].Text+"#"+
+                    listView.Items[i].SubItems[2].Text);
+            }
+            listView.Items.Clear();
+            sw.Close();
+            fs.Close();
+
+        }
+==================================================
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+            FileStream fs = new FileStream(openFileDialog1.FileName, FileMode.Open);
+            StreamReader sr = new StreamReader(fs);
+            String[] st;
+            listView.Items.Clear();
+            while (!sr.EndOfStream)
+            {
+                st = sr.ReadLine().Split('#');
+                ListViewItem T = listView.Items.Add(st[0]);
+                T.SubItems.Add(st[1]);
+                T.SubItems.Add(st[2]);
+            }
+            fs.Close();
+        }
+    }

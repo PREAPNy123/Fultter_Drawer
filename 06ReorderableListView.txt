@@ -1,0 +1,135 @@
+import 'package:flutter/material.dart';
+
+import 'appdetail.dart';
+void main()=>runApp(MyApp());
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Home(), // class
+    );
+  }
+}
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Reordering Listview '),),
+      body: SafeArea(
+        child: AppDetail(), //class
+      ),
+    );
+  }
+}
+
+===========================================================================
+
+import 'package:flutter/material.dart';
+class AppDetail extends StatefulWidget {
+  const AppDetail({Key? key}) : super(key: key);
+
+  @override
+  State<AppDetail> createState() => _AppDetailState();
+}
+
+class _AppDetailState extends State<AppDetail> {
+  var ls=['Dara ko', 'Sok pheak ','chan sophea','pow srey neang','chan bopha','sok vichika'];
+  @override
+  Widget build(BuildContext context) {
+    return ReorderableListView.builder(
+        itemBuilder: _itemBuider,
+        itemCount: ls.length,
+        onReorder: _updateItem,
+    );
+  }
+  //=====================funtion==========
+  void _updateItem(int oldIndex , int newIndex){
+    setState(() {
+      var item = ls.removeAt(oldIndex);
+      ls.insert(newIndex, item);
+    });
+  }
+	//=====================funtion==========
+	
+  void _delete(int index){
+    showDialog(
+      barrierDismissible: false,  // can not close form Dialog
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title: Text('Are you sure want you to Delete !'),
+            content: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 10,right: 10),
+                    child: ElevatedButton(onPressed: (() {
+                      setState(() {
+                        ls.removeAt(index);
+                        Navigator.of(context).pop();
+                      });
+                    }), child: Text('Yes')),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 10,right: 10),
+                    child: ElevatedButton(onPressed: (() {
+                      Navigator.of(context).pop();
+                    }), child: Text('No')),
+                  ),
+                ),
+              ],
+            ),
+          );
+      });
+  }
+
+  void _editItem(int index){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title: TextFormField(
+              initialValue: ls[index],
+              onFieldSubmitted: (value){
+               setState(() {
+                 ls[index]=value;
+                 Navigator.of(context).pop();
+               });
+              },
+            ),
+          );
+        },
+    );
+  }
+  Widget _itemBuider(BuildContext context  , int index){
+    return Card(
+      elevation: 10.9,
+      shadowColor: Color(0xB454C5D9),
+      color: index.isEven? Colors.white70:Colors.white24,
+      key: ValueKey(index),
+      child: ListTile(
+        leading: CircleAvatar(
+          child: Icon(Icons.message),
+        ),
+        title: Text(ls[index]),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children:[
+            IconButton(
+              onPressed: () => _editItem(index),
+              icon: Icon(Icons.edit),),
+            IconButton(
+              onPressed: () => _delete(index),
+              icon: Icon(Icons.delete),),
+          ],
+        ),
+      ),
+    );
+  }
+}

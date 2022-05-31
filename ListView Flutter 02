@@ -1,0 +1,144 @@
+import 'package:flutter/material.dart';
+
+import 'home.dart';
+
+void main() {
+  runApp( MyApp());
+}
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.pink,
+      ),
+      home: Home(),
+    );
+  }
+}
+========================================================================
+
+import 'package:flutter/material.dart';
+
+import 'Mylist.dart';
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.pink,
+        leading: Icon(Icons.view_headline),
+        title: Text('My App'),
+      ),
+      body: SafeArea(
+        child: Mylist(),
+      ),
+    );
+  }
+}
+=========================================================================
+
+import 'package:flutter/material.dart';
+import 'package:teslonglis/model.dart';
+
+import 'Detail.dart';
+class Mylist extends StatelessWidget {
+  final list =people.generate();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: list.length,
+        itemBuilder: (context,index){
+      return ListTile(
+        leading: CircleAvatar(backgroundImage: NetworkImage(list[index].photo),),
+        title: Text(list[index].Name),
+        subtitle: Text(list[index].Email),
+		
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return Detail(list[index]);
+          }));
+        },
+      );
+    });
+  }
+}
+=======================================================================
+
+import 'package:flutter/material.dart';
+import 'package:teslonglis/model.dart';
+
+class Detail extends StatelessWidget {
+  final people People;
+  //creat Methode widget
+  Widget _widget(String label, String value){
+    return   Padding(
+      padding: const EdgeInsets.all(8.0),// Padding 8px
+      child: Row(children: [
+        Expanded(
+          flex: 1,
+          child: Text(label,//'Name :',
+            style: TextStyle(
+            fontSize: 20,
+            color: Colors.blue,
+            fontWeight: FontWeight.bold,
+          ),),
+        ),
+        Expanded(
+          flex: 3,
+          child: Text(value,//People.Name,
+            style: TextStyle(
+              fontSize: 20,
+              color: People.gender=='Female'?Colors.pink:Colors.blue,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),],),
+    );
+  }
+  Detail(this.People); //constacto r
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(People.Name),
+        backgroundColor: People.gender=='Female'?Colors.pink:Colors.blue,//condition
+      ),
+      body: Column(children: [
+        Image(height: 200,width: 200,image: NetworkImage(People.photo),),
+        _widget('Name: ',People.Name),
+        _widget('Gender: ',People.gender),
+        _widget('Email: ', People.Email),
+        _widget('Address: ', People.Address),
+      ],),
+    );
+  }
+}
+====================================Create class People ===============================================
+
+class people{
+  final String id;
+  final String Name;
+  final String gender;
+  final String Email;
+  final String Address;
+  final String photo;
+  
+  people(this.id, this.Name, this.gender, this.Email, this.Address, this.photo);
+
+  static List<people> generate(){   // we must used static
+    return[
+      new people("0012AB", "Sok Kakra", 'Male', 'Sok@kakra.com',' phnom phen', 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MTZ8MTA1OTY0MTZ8fGVufDB8fHx8&w=1000&q=80'),
+      new people("0942", 'Dara', 'Male', "Dara@gmail.com", '# Svay rieng ', 'https://www.phdmedia.com/romania/wp-content/uploads/sites/73/2015/05/temp-people-profile.jpg'),
+      people('024384', "Srey pow", 'Female', "SreyPow@gmail.com", 'Phom phen', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUO70Rs1voEV-i_Q-g5Yesw8nutVG44x4LKEOFgCUBjT5imdRDq79_THG0IJCrhc-OhUk&usqp=CAU'),
+      people('0243984', 'kanhnha', 'Female', 'kanhnha@gmainl.com', 'Svay rieng ', 'https://www.hsbc.com/-/files/hsbc/careers/employee-profiles/profile-images/dariia-karaianu-private-banking-usa-660x495.jpg?h=495&w=660&la=en-GB&hash=100696DA7CA5465A4DEE2227E7FF02F3'),
+    ];
+  }
+}
